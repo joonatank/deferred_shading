@@ -3,7 +3,7 @@
 // 2011-04
 //
 // Under MIT license.
-//
+
 // Eye space vertex program for single light.
 
 // Defines:

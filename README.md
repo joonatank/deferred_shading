@@ -1,12 +1,12 @@
 # Deferred Shading
 
 ## Why this example
-1. Showcases performance testing in the domain of Computer graphics
+1. Showcases performance testing in the domain of Computer graphics.
 2. Real-world case where performance was found to be the bottleneck (good performance is 120 Hz, adequate is 30-60 Hz). Ours was 10-30 Hz before optimisation.
-3. Complex testing (graphics processors are notoriously hard to debug)
- * Requires outputing debug data into a picture
- * Stepping through frames and checking picture data
-4. Programming GPUs is a completely different ball game than CPUs (4 processors vs. hundreds)
+3. Complex testing (graphics processors are notoriously hard to debug).
+ * Requires outputing debug data into a picture.
+ * Stepping through frames and checking picture data.
+4. Programming GPUs is a completely different ball game than CPUs (4 processors vs. hundreds).
 5. 3D graphics require solid mathematics esp. linear algebra.
 
 ## Intro to Computer Graphics
@@ -23,6 +23,9 @@ So it requires the vertex program to be run 8 or 24 times and the pixel program 
 
 ## What is deferred shading
 In traditionally rendering (also called Forward rendering) the whole scene is rendered once for each light. So if we have five lights the same scene is rendered five times and then the result is combined for the final image.
+
+Deferred shading instead does a separate pass to render the geometry into a texture and then does the same light passes as forward renderer on the texture instead of rendering the geometry multiple times.
+With a complex scene you reduce millions of vertices (geometry) into a single G-Buffer (image) that is a lot faster to render for each light than rendering the original geometry.
 
 #### High-level
 Forward
@@ -41,13 +44,16 @@ for each l in lights:
 combine all images
 ```
 
-With a complex scene you reduce millions of vertices (geometry) into a single G-Buffer (image) that is a lot faster to render for each light.
-
 Deferred shading requires an extra render pass for G-buffer so in simple cases where we have either simple geometry or a single light source it's going to be slower, but for real world cases it's almost always faster. It has other issues though so in some cases it's not the best choice.
 
 
 ## Results
-The following picture is a comparison of forward and deferred shading with complex geometry and multiple lights.
+The following picture is a comparison of forward and deferred shading using our software. The scene has complex geometry (hundreds of thousands vertices) and multiple lights (four).
+The final image quality doesn't matter here (it's because we used the same parameters for testing). The pictures are taken excatly at the same time: directly after starting the program and loading the scene.
+
+We get a noticable performance increase of
+* 36% in the simpler model with one less light
+* 79% in the more complex with more lights.
 
 ![Performance comparison](Hydra_deferred_shading_performance_comparison.png)
 
